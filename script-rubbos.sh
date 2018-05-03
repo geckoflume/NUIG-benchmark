@@ -7,6 +7,10 @@ if [[ $# -ne 1 ]] || [[ "$1" != "install" && "$1" != "run" ]]; then
 	echo Syntax : $0 install or $0 run
 	exit 1
 fi
+
+BASEDIR=$(dirname "$0")
+echo "$BASEDIR"
+
 case $1 in
 	install)
 		echo "Installing RUBBoS..."
@@ -30,62 +34,7 @@ case $1 in
 		#Building client
 		cd ../Client
 		make
-		cat > rubbos.properties << EOF
-# HTTP server information
-httpd_hostname = localhost
-httpd_port = 80
-
-# Precise which version to use. Only valid option is PHP.
-httpd_use_version = PHP
-
-# PHP information
-php_html_path = /PHP
-php_script_path = /PHP
-
-#Database information
-database_server = localhost
-
-# Workload: precise which transition table to use
-workload_remote_client_nodes =
-workload_remote_client_command = /usr/lib/jvm/java-7-openjdk-amd64/java -classpath RUBBoS edu.rice.rubbos.client.ClientEmulator
-workload_number_of_clients_per_node = 100
-
-workload_user_transition_table = /home/stack/RUBBoS/workload/user_default_transitions.txt
-workload_author_transition_table = /home/stack/RUBBoS/workload/author_default_transitions.txt
-workload_number_of_columns = 24
-workload_number_of_rows = 26
-workload_maximum_number_of_transitions = 1000
-workload_use_tpcw_think_time = yes
-workload_number_of_stories_per_page = 20
-workload_up_ramp_time_in_ms = 150000
-workload_up_ramp_slowdown_factor = 2
-workload_session_run_time_in_ms = 900000
-workload_down_ramp_time_in_ms = 150000
-workload_down_ramp_slowdown_factor = 3
-workload_percentage_of_author = 10
-
-# home policy
-database_number_of_authors = 50
-database_number_of_users = 500000
-
-# Stories policy
-database_story_dictionnary = /home/stack/RUBBoS/database/dictionary
-database_story_maximum_length = 1024
-database_oldest_story_year = 1998
-database_oldest_story_month = 1
-
-# Comments policy
-database_comment_max_length = 1024
-
-# Monitoring Information
-monitoring_debug_level = 0
-monitoring_program = /usr/bin/sar
-monitoring_options = -n DEV -n SOCK -rubcw
-monitoring_sampling_in_seconds = 1
-monitoring_rsh = /usr/bin/rsh
-monitoring_scp = /usr/bin/scp
-monitoring_gnuplot_terminal = gif
-EOF
+		yes | cp -rf $BASEDIR/rubbos.properties ~/RUBBoS/RUBBoS/Client/
 		zip rubbos_client.jar rubbos.properties
 		echo "Database setup..."
 		#Configuring MySQL database
@@ -100,6 +49,8 @@ EOF
 		replace "/home/cecchet/RUBBoS/database/" "" -- load.sql
 		mysql -u root -p1a2b3c -D rubbos < load.sql
 		exit 0
+		echo "Fixing compute_global_stats.awk..."
+		yes | cp -rf $BASEDIR/compute_global_stats.awk ~/RUBBoS/RUBBoS/bench/
 		;;
 	run)
 		echo "Running RUBBoS benchmark... "
