@@ -26,8 +26,6 @@ case $1 in
 		sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password 1a2b3c'
 		sudo apt-get -y -qq install git openjdk-7-jdk sysstat apache2 libapache2-mod-php5 php5-cli mysql-server gnuplot
 		export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-		mkdir -p ~/RUBBoS
-		cd ~/RUBBoS
 		#Downloading RUBBoS
 		git clone https://github.com/michaelmior/RUBBoS.git
 		#Installing RUBBoS
@@ -38,7 +36,8 @@ case $1 in
 		#Building client
 		cd ../Client
 		make
-		yes | cp -rf $BASEDIR/rubbos.properties ~/RUBBoS/RUBBoS/Client/
+		yes | cp -rf $BASEDIR/files/rubbos.properties $BASEDIR/RUBBoS/Client/
+		replace "BASEDIR" "$BASEDIR" -- rubbos.properties
 		zip rubbos_client.jar rubbos.properties
 		echo -e "\033[0;32mDatabase setup...\033[0m"
 		#Configuring MySQL database
@@ -54,12 +53,12 @@ case $1 in
 		mysql -u root -p1a2b3c -D rubbos < load.sql
 		exit 0
 		echo -e "\033[0;32mFixing compute_global_stats.awk...\033[0m"
-		yes | cp -rf $BASEDIR/compute_global_stats.awk ~/RUBBoS/RUBBoS/bench/
+		yes | cp -rf $BASEDIR/files/compute_global_stats.awk $BASEDIR/RUBBoS/bench/
 		;;
 	run)
 		echo -e "\033[0;32mRunning RUBBoS benchmark...\033[0m"
 		#Running Browser Emulator (RUBBoS benchmark) and data analysis
-		cd ~/RUBBoS/RUBBoS
+		cd $BASEDIR/RUBBoS
 		make emulator
 		echo -e "\033[0;32mResult located in rubbosResult.txt\033[0m"
 		#TODO:export data from benchmark analysis (bench/xxxx-xx-xx@xx:xx:xx/stat_client0.html) to rubbosResult.txt

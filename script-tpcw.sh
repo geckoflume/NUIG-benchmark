@@ -13,14 +13,16 @@ if [ "$EUID" -ne 0 ]; then
 	exit 1
 fi
 
+BASEDIR=$(pwd)
+
 case $1 in
 	install)
 		echo -e "\033[0;32mInstalling TCP-W...\033[0m"
 		#Installing required packages
 		sudo apt-get update
 		sudo apt-get -y -qq install git openjdk-7-jdk ant perl tomcat7 tomcat7-admin python-matplotlib python-scipy
-		mkdir -p ~/TPCW
-		cd ~/TPCW
+		mkdir -p $BASEDIR/TPCW
+		cd $BASEDIR/TPCW
 		#Downloading and installing Mckoi SQL Database
 		wget http://mckoi.com/database/ver/mckoi1.0.6.zip
 		unzip mckoi1.0.6.zip
@@ -30,7 +32,7 @@ case $1 in
 		java -jar mckoidb.jar -create "admin" "admin"
 		#Launching mckoidb server
 		java -jar mckoidb.jar & PID=$!
-		cd ~/TPCW
+		cd $BASEDIR/TPCW
 		#Downloading java-tpcw
 		git clone https://github.com/jopereira/java-tpcw.git
 		cd java-tpcw
@@ -54,8 +56,8 @@ case $1 in
 	run)
 		echo -e "\033[0;32mRunning TCP-W benchmark...\033[0m"
 		#Launching mckoidb server
-		java -jar ~/TPCW/mckoi1.0.6/mckoidb.jar & PID=$!
-		cd ~/TPCW/java-tpcw
+		java -jar $BASEDIR/TPCW/mckoi1.0.6/mckoidb.jar & PID=$!
+		cd $BASEDIR/TPCW/java-tpcw
 		#Running Remote Browser Emulator (TPC-W benchmark)
 		./rbe.sh
 		#Running result analysis script
