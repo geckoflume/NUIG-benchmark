@@ -19,8 +19,8 @@ case $1 in
 	install)
 		echo -e "\033[0;32mInstalling TCP-W...\033[0m"
 		#Installing required packages
-		sudo apt-get update
-		sudo apt-get -y -qq install git openjdk-7-jdk ant perl tomcat7 tomcat7-admin python-matplotlib python-scipy
+		sudo apt-get -q update
+		sudo apt-get -y -q install git openjdk-7-jdk ant perl tomcat7 tomcat7-admin python-matplotlib python-scipy
 		mkdir -p $BASEDIR/TPCW
 		cd $BASEDIR/TPCW
 		#Downloading and installing Mckoi SQL Database
@@ -68,6 +68,7 @@ case $1 in
 		#Running result analysis script
 		./showtpc.py --bench=w $(ls run1_* | tail -1) > tpcwResult.txt
 		echo -e "\033[0;32mResult located in tpcwResult.txt\033[0m"
+		kill -2 $PID
 		exit 0
 		;;
 	plot)

@@ -19,12 +19,13 @@ case $1 in
 	install)
 		echo -e "\033[0;32mInstalling RUBBoS...\033[0m"
 		#Installing required packages
-		sudo apt-get update
+		sudo add-apt-repository ppa:ondrej/php -y
+		sudo apt-get -q update
 		#MySQL Username:root
 		#MySQL Password:1a2b3c
 		sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password 1a2b3c'
 		sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password 1a2b3c'
-		sudo apt-get -y -qq install git openjdk-7-jdk sysstat apache2 libapache2-mod-php5 php5-cli mysql-server gnuplot
+		sudo apt-get -y -q install git openjdk-7-jdk sysstat apache2 libapache2-mod-php7.1 php7.1-cli mysql-server gnuplot
 		export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 		#Downloading RUBBoS
 		git clone https://github.com/michaelmior/RUBBoS.git
