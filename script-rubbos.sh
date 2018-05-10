@@ -8,6 +8,10 @@ if [[ $# -ne 1 ]] || [[ "$1" != "install" && "$1" != "run" ]]; then
 	exit 1
 fi
 
+if [ "$EUID" -ne 0 ]; then echo "Please run as root"
+  exit 1
+fi
+
 BASEDIR=$(dirname "$0")
 echo "$BASEDIR"
 
