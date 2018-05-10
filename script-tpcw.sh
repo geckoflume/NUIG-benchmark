@@ -8,8 +8,9 @@ if [[ $# -ne 1 ]] || [[ "$1" != "install" && "$1" != "run" && "$1" != "plot" ]];
 	exit 1
 fi
 
-if [ "$EUID" -ne 0 ]; then echo "Please run as root"
-  exit 1
+if [ "$EUID" -ne 0 ]; then
+	echo "Please run as root"
+	exit 1
 fi
 
 case $1 in
