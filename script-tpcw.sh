@@ -51,6 +51,7 @@ case $1 in
 		wget https://gist.githubusercontent.com/jopereira/4086237/raw/9b279cab3c8565b707808e299fe1811f1540d625/showtpc.py
 		chmod u+x showtpc.py
 		kill -2 $PID
+		echo -e "\033[0;32mInstallation completed successfully!\033[0m"
 		exit 0
 		;;
 	run)

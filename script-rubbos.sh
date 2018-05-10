@@ -54,6 +54,8 @@ case $1 in
 		exit 0
 		echo -e "\033[0;32mFixing compute_global_stats.awk...\033[0m"
 		yes | cp -rf $BASEDIR/files/compute_global_stats.awk $BASEDIR/RUBBoS/bench/
+		echo -e "\033[0;32mInstallation completed successfully!\033[0m"
+		exit 0
 		;;
 	run)
 		if [ ! -d "$BASEDIR/RUBBoS/" ]; then
