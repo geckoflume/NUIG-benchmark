@@ -4,7 +4,7 @@
 #Result content will be in tpcwResult.txt
 
 if [[ $# -ne 1 ]] || [[ "$1" != "install" && "$1" != "run" && "$1" != "plot" ]]; then
-	echo Syntax : $0 install or $0 run or $0 plot
+	echo "Syntax : $0 install or $0 run or $0 plot"
 	exit 1
 fi
 
@@ -15,7 +15,7 @@ fi
 
 case $1 in
 	install)
-		echo "Installing TCP-W..."
+		echo -e "\033[0;32mInstalling TCP-W...\033[0m"
 		#Installing required packages
 		sudo apt-get update
 		sudo apt-get -y -qq install git openjdk-7-jdk ant perl tomcat7 tomcat7-admin python-matplotlib python-scipy
@@ -42,7 +42,7 @@ case $1 in
 		sudo ant inst
 		sleep 10
 		sudo ant genimg
-		echo "Database setup..."
+		echo -e "\033[0;32mDatabase setup...\033[0m"
 		#Filling database
 		sudo ant gendb
 		#Downloading result analysis script
@@ -52,7 +52,7 @@ case $1 in
 		exit 0
 		;;
 	run)
-		echo "Running TCP-W benchmark... "
+		echo -e "\033[0;32mRunning TCP-W benchmark...\033[0m"
 		#Launching mckoidb server
 		java -jar ~/TPCW/mckoi1.0.6/mckoidb.jar & PID=$!
 		cd ~/TPCW/java-tpcw
@@ -60,11 +60,11 @@ case $1 in
 		./rbe.sh
 		#Running result analysis script
 		./showtpc.py --bench=w $(ls run1_* | tail -1) > tpcwResult.txt
-		echo "Result located in tpcwResult.txt"
+		echo -e "\033[0;32mResult located in tpcwResult.txt\033[0m"
 		exit 0
 		;;
 	plot)
-		echo "Plotting result... "
+		echo -e "\033[0;32mPlotting result...\033[0m"
 		#Running result analysis script
 		./showtpc.py --bench=w -p $(ls run1_* | tail -1)
 		exit 0

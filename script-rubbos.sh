@@ -4,7 +4,7 @@
 #Result content will be in rubbosResult.txt
 
 if [[ $# -ne 1 ]] || [[ "$1" != "install" && "$1" != "run" ]]; then
-	echo Syntax : $0 install or $0 run
+	echo "Syntax : $0 install or $0 run"
 	exit 1
 fi
 
@@ -13,12 +13,11 @@ if [ "$EUID" -ne 0 ]; then
 	exit 1
 fi
 
-BASEDIR=$(dirname "$0")
-echo "$BASEDIR"
+BASEDIR=$(pwd)
 
 case $1 in
 	install)
-		echo "Installing RUBBoS..."
+		echo -e "\033[0;32mInstalling RUBBoS...\033[0m"
 		#Installing required packages
 		sudo apt-get update
 		#MySQL Username:root
@@ -35,13 +34,13 @@ case $1 in
 		cd RUBBoS/PHP
 		mv config.example.php config.php
 		sudo cp -r ../PHP/ /var/www/html/
-		echo "Building client..."
+		echo -e "\033[0;32mBuilding client...\033[0m"
 		#Building client
 		cd ../Client
 		make
 		yes | cp -rf $BASEDIR/rubbos.properties ~/RUBBoS/RUBBoS/Client/
 		zip rubbos_client.jar rubbos.properties
-		echo "Database setup..."
+		echo -e "\033[0;32mDatabase setup...\033[0m"
 		#Configuring MySQL database
 		sudo sed -i 's/\[mysqld\]/[mysqld]\nsecure_file_priv = ""/' /etc/mysql/my.cnf
 		sudo /etc/init.d/mysql restart
@@ -54,15 +53,15 @@ case $1 in
 		replace "/home/cecchet/RUBBoS/database/" "" -- load.sql
 		mysql -u root -p1a2b3c -D rubbos < load.sql
 		exit 0
-		echo "Fixing compute_global_stats.awk..."
+		echo -e "\033[0;32mFixing compute_global_stats.awk...\033[0m"
 		yes | cp -rf $BASEDIR/compute_global_stats.awk ~/RUBBoS/RUBBoS/bench/
 		;;
 	run)
-		echo "Running RUBBoS benchmark... "
+		echo -e "\033[0;32mRunning RUBBoS benchmark...\033[0m"
 		#Running Browser Emulator (RUBBoS benchmark) and data analysis
 		cd ~/RUBBoS/RUBBoS
 		make emulator
-		echo "Result located in rubbosResult.txt"
+		echo -e "\033[0;32mResult located in rubbosResult.txt\033[0m"
 		#TODO:export data from benchmark analysis (bench/xxxx-xx-xx@xx:xx:xx/stat_client0.html) to rubbosResult.txt
 		exit 0
 esac
