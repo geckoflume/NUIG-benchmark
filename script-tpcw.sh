@@ -54,6 +54,10 @@ case $1 in
 		exit 0
 		;;
 	run)
+		if [ ! -d "$BASEDIR/TPCW/java-tpcw/" ]; then
+			echo -e "\033[0;31mTCP-W benchmark not installed, please run $0 install first...\033[0m"
+			exit 1
+		fi
 		echo -e "\033[0;32mRunning TCP-W benchmark...\033[0m"
 		#Launching mckoidb server
 		java -jar $BASEDIR/TPCW/mckoi1.0.6/mckoidb.jar & PID=$!
@@ -66,8 +70,13 @@ case $1 in
 		exit 0
 		;;
 	plot)
+		latestrun=$(ls run1_* | tail -1)
+		if [ -z "$latestrun" ]; then
+			echo -e "\033[0;31mTCP-W benchmark was never executed, please run $0 run first...\033[0m"
+			exit 1
+		fi
 		echo -e "\033[0;32mPlotting result...\033[0m"
 		#Running result analysis script
-		./showtpc.py --bench=w -p $(ls run1_* | tail -1)
+		./showtpc.py --bench=w -p $latestrun
 		exit 0
 esac

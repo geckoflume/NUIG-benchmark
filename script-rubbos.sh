@@ -56,6 +56,10 @@ case $1 in
 		yes | cp -rf $BASEDIR/files/compute_global_stats.awk $BASEDIR/RUBBoS/bench/
 		;;
 	run)
+		if [ ! -d "$BASEDIR/RUBBoS/" ]; then
+			echo -e "\033[0;31mRUBBoS benchmark not installed, please run $0 install first...\033[0m"
+			exit 1
+		fi
 		echo -e "\033[0;32mRunning RUBBoS benchmark...\033[0m"
 		#Running Browser Emulator (RUBBoS benchmark) and data analysis
 		cd $BASEDIR/RUBBoS
