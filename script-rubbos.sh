@@ -52,7 +52,6 @@ case $1 in
 		sudo cp *.data /var/lib/mysql/rubbos/
 		replace "/home/cecchet/RUBBoS/database/" "" -- load.sql
 		mysql -u root -p1a2b3c -D rubbos < load.sql
-		exit 0
 		echo -e "\033[0;32mFixing compute_global_stats.awk...\033[0m"
 		yes | cp -rf $BASEDIR/files/compute_global_stats.awk $BASEDIR/RUBBoS/bench/
 		echo -e "\033[0;32mInstallation completed successfully!\033[0m"
